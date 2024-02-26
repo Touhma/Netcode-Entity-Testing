@@ -1,19 +1,17 @@
-﻿using Unity.Collections;
+﻿using Netcode.Commands;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
 namespace Netcode.Systems
 {
-    public struct ClientMessageRpcCommand : IRpcCommand
-    {
-        public FixedString64Bytes Message;
-    }
 
-    public struct SpawnUnitRpcCommand : IRpcCommand { }
+
+    
 
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
-    public partial class ClientSystem : SystemBase
+    public partial class InputClientSystem : SystemBase
     {
         public NetcodeEntityInputs Inputs;
 
@@ -29,13 +27,6 @@ namespace Netcode.Systems
         {
             EntityCommandBuffer commandBuffer = new(Allocator.Temp);
 
-            foreach ((RefRO<ReceiveRpcCommandRequest> request, RefRO<ServerMessageRpcCommand> command, Entity entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<ServerMessageRpcCommand>>().WithEntityAccess())
-            {
-                Debug.Log(command.ValueRO.Message);
-                commandBuffer.DestroyEntity(entity);
-            }
-
-            // To send command need 1 entity per command 
             if (Inputs.Player.Space.WasPerformedThisFrame())
             {
                 SendMessageRpc("Hello from client ", ConnectionManager.ClientWorld);

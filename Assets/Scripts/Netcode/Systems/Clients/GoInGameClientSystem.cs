@@ -1,10 +1,11 @@
-﻿using Unity.Collections;
+﻿using Netcode.Commands;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 
 namespace Netcode.Systems
 {
-    public struct GoInGameCommand : IRpcCommand { }
+    
 
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     public partial struct GoInGameClientSystem : ISystem
