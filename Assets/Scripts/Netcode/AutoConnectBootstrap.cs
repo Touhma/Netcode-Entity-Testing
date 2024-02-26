@@ -1,8 +1,9 @@
 ﻿using Unity.NetCode;
+using UnityEngine.Scripting;
 
 namespace Netcode
 {
-    [UnityEngine.Scripting.Preserve]
+    [Preserve]
     public class AutoConnectBootstrap : ClientServerBootstrap
     {
         public override bool Initialize(string defaultWorldName)

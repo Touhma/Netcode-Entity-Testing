@@ -15,8 +15,17 @@ namespace Netcode.Systems
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     public partial class ServerSystem : SystemBase
     {
+        private ComponentLookup<NetworkId> _clients;
+
+        protected override void OnCreate()
+        {
+            _clients = GetComponentLookup<NetworkId>();
+        }
+
         protected override void OnUpdate()
         {
+            _clients.Update(this);
+            
             EntityCommandBuffer commandBuffer = new (Allocator.Temp);
             
             foreach ((RefRO<NetworkId> networkId, Entity entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<InitializedClient>().WithEntityAccess())
