@@ -49,8 +49,10 @@ namespace Netcode.Systems
 
             foreach ((RefRO<ReceiveRpcCommandRequest> request, RefRO<SpawnUnitRpcCommand> command, Entity entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<SpawnUnitRpcCommand>>().WithEntityAccess())
             {
+                Debug.Log("Server Spawn Check");
                 if (!SystemAPI.TryGetSingleton(out PrefabsComponentData prefabsComponentData) || prefabsComponentData.Prefab == Entity.Null) continue;
 
+                Debug.Log("Server Spawn");
                 Entity unit = commandBuffer.Instantiate(prefabsComponentData.Prefab);
                 commandBuffer.SetComponent(unit, new LocalTransform()
                 {

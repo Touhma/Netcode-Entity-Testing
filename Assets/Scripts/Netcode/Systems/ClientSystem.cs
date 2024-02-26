@@ -43,6 +43,7 @@ namespace Netcode.Systems
 
             if (Inputs.Player.Spawn.WasPerformedThisFrame())
             {
+                Debug.Log("Spawn ! ");
                 SpawnUnitRpc(ConnectionManager.ClientWorld);
             }
 
@@ -76,7 +77,7 @@ namespace Netcode.Systems
                 return;
             }
 
-            world.EntityManager.CreateEntity(typeof(SpawnUnitRpcCommand), typeof(ClientMessageRpcCommand));
+            world.EntityManager.CreateEntity(typeof(SendRpcCommandRequest), typeof(SpawnUnitRpcCommand) );
         }
     }
 }
