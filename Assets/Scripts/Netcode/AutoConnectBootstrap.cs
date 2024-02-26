@@ -1,24 +1,15 @@
 using Unity.NetCode;
 using UnityEngine.Scripting;
 
-[Preserve]
-public class AutoConnectBootstrap : ClientServerBootstrap
+namespace Netcode
 {
-    public override bool Initialize(string defaultWorldName)
+    [Preserve]
+    public class AutoConnectBootstrap : ClientServerBootstrap
     {
-        AutoConnectPort = 0;
-        /*
-           if (AutoConnectPort != 0)
-            {
-                return base.Initialize(defaultWorldName);
-            }
-            else
-            {
-                AutoConnectPort = 0;
-                CreateLocalWorld(defaultWorldName);
-                return true;
-            }
-         */
-        return false;
+        public override bool Initialize(string defaultWorldName)
+        {
+            AutoConnectPort = 0;
+            return false;
+        }
     }
 }

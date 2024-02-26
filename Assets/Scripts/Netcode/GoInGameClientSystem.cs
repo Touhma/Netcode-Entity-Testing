@@ -1,34 +1,35 @@
+using Netcode.CommandsRpc;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 
-public struct GoInGameCommand : IRpcCommand
+namespace Netcode
 {
 
-}
 
-[WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
-public partial struct GoInGameClientSystem : ISystem
-{
-    public void OnCreate(ref SystemState state)
+    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
+    public partial struct GoInGameClientSystem : ISystem
     {
-        var builder = new EntityQueryBuilder(Allocator.Temp);
-        builder.WithAny<NetworkId>();
-        builder.WithNone<NetworkStreamInGame>();
-        state.RequireForUpdate(state.GetEntityQuery(builder));
-    }
-
-    public void OnUpdate(ref SystemState state)
-    {
-        var commandBuffer = new EntityCommandBuffer(Allocator.Temp);
-        foreach (var (id, entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<NetworkStreamInGame>().WithEntityAccess())
+        public void OnCreate(ref SystemState state)
         {
-            commandBuffer.AddComponent<NetworkStreamInGame>(entity);
-            var request = commandBuffer.CreateEntity();
-            commandBuffer.AddComponent<GoInGameCommand>(request);
-            commandBuffer.AddComponent<SendRpcCommandRequest>(request);
+            EntityQueryBuilder builder = new(Allocator.Temp);
+            builder.WithAny<NetworkId>();
+            builder.WithNone<NetworkStreamInGame>();
+            state.RequireForUpdate(state.GetEntityQuery(builder));
         }
-        commandBuffer.Playback(state.EntityManager);
-        commandBuffer.Dispose();
+
+        public void OnUpdate(ref SystemState state)
+        {
+            EntityCommandBuffer commandBuffer = new(Allocator.Temp);
+            foreach ((RefRO<NetworkId> id, Entity entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<NetworkStreamInGame>().WithEntityAccess())
+            {
+                commandBuffer.AddComponent<NetworkStreamInGame>(entity);
+                Entity request = commandBuffer.CreateEntity();
+                commandBuffer.AddComponent<GoInGameCommand>(request);
+                commandBuffer.AddComponent<SendRpcCommandRequest>(request);
+            }
+            commandBuffer.Playback(state.EntityManager);
+            commandBuffer.Dispose();
+        }
     }
 }

@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -44,7 +44,6 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 12
-  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -149,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb10c7114104fe94c8d22499323d5df6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 1101654530433804549, guid: a9575d5020d7bf242a5797504e9274c7, type: 3}
-  player: {fileID: 2969662026390888002, guid: 71b87e2a09878314380df1480c243b61, type: 3}
+  Unit: {fileID: 1101654530433804549, guid: a9575d5020d7bf242a5797504e9274c7, type: 3}
+  Player: {fileID: 2969662026390888002, guid: 71b87e2a09878314380df1480c243b61, type: 3}
 --- !u!4 &92872305
 Transform:
   m_ObjectHideFlags: 0
@@ -224,6 +223,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

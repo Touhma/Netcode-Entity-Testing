@@ -1,65 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
+using Netcode.CommandsRpc;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-public struct ClientMessageRpcCommand : IRpcCommand
-{
-    public FixedString64Bytes message;
-}
-
-public struct SpawnUnitRpcCommand : IRpcCommand
+namespace Netcode
 {
 
-}
-
-[WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
-public partial class ClientSystem : SystemBase
-{
-
-    protected override void OnCreate()
+    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
+    public partial class ClientSystem : SystemBase
     {
-        RequireForUpdate<NetworkId>();
-    }
 
-    protected override void OnUpdate()
-    {
-        var commandBuffer = new EntityCommandBuffer(Allocator.Temp);
-        foreach (var (request, command, entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<ServerMessageRpcCommand>>().WithEntityAccess())
+        protected override void OnCreate()
         {
-            Debug.Log(command.ValueRO.message);
-            commandBuffer.DestroyEntity(entity);
+            RequireForUpdate<NetworkId>();
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SpawnUnitRpc(ConnectionManager.clientWorld);
-        }
-        commandBuffer.Playback(EntityManager);
-        commandBuffer.Dispose();
-    }
 
-    public void SendMessageRpc(string text, World world)
-    {
-        if (world == null || world.IsCreated == false)
+        protected override void OnUpdate()
         {
-            return;
+            EntityCommandBuffer commandBuffer = new(Allocator.Temp);
+            foreach ((RefRO<ReceiveRpcCommandRequest> request, RefRO<ServerMessageRpcCommand> command, Entity entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<ServerMessageRpcCommand>>().WithEntityAccess())
+            {
+                Debug.Log(command.ValueRO.Message);
+                commandBuffer.DestroyEntity(entity);
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SpawnUnitRpc(ConnectionManager.ClientWorld);
+            }
+            commandBuffer.Playback(EntityManager);
+            commandBuffer.Dispose();
         }
-        var entity = world.EntityManager.CreateEntity(typeof(SendRpcCommandRequest), typeof(ClientMessageRpcCommand));
-        world.EntityManager.SetComponentData(entity, new ClientMessageRpcCommand()
-        {
-            message = text
-        });
-    }
 
-    public void SpawnUnitRpc(World world)
-    {
-        if (world == null || world.IsCreated == false)
+        public void SendMessageRpc(string text, World world)
         {
-            return;
+            if (world == null || world.IsCreated == false)
+            {
+                return;
+            }
+            Entity entity = world.EntityManager.CreateEntity(typeof(SendRpcCommandRequest), typeof(ClientMessageRpcCommand));
+            world.EntityManager.SetComponentData(entity, new ClientMessageRpcCommand()
+            {
+                Message = text
+            });
         }
-        world.EntityManager.CreateEntity(typeof(SendRpcCommandRequest), typeof(SpawnUnitRpcCommand));
-    }
 
+        public void SpawnUnitRpc(World world)
+        {
+            if (world == null || world.IsCreated == false)
+            {
+                return;
+            }
+            world.EntityManager.CreateEntity(typeof(SendRpcCommandRequest), typeof(SpawnUnitRpcCommand));
+        }
+
+    }
 }

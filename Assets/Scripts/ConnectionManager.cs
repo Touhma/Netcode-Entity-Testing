@@ -8,13 +8,12 @@ using PlayType = Unity.NetCode.ClientServerBootstrap.PlayType;
 
 public class ConnectionManager : MonoBehaviour
 {
+    [SerializeField] private string ListenIP = "127.0.0.1";
+    [SerializeField] private string ConnectIP = "127.0.0.1";
+    [SerializeField] private ushort Port = 7979;
 
-    [SerializeField] private string _listenIP = "127.0.0.1";
-    [SerializeField] private string _connectIP = "127.0.0.1";
-    [SerializeField] private ushort _port = 7979;
-
-    public static World serverWorld = null;
-    public static World clientWorld = null;
+    public static World ServerWorld = null;
+    public static World ClientWorld = null;
 
 
     private static PlayType _role = PlayType.ClientAndServer;
@@ -33,9 +32,10 @@ public class ConnectionManager : MonoBehaviour
         {
             _role = PlayType.Client;
         }
+
         StartCoroutine(Connect());
     }
-    
+
     private static void DestroyLocalSimulationWorld()
     {
         foreach (World world in World.All)
@@ -50,70 +50,73 @@ public class ConnectionManager : MonoBehaviour
     {
         if (_role is PlayType.ClientAndServer or PlayType.Server)
         {
-            serverWorld = ClientServerBootstrap.CreateServerWorld("ServerWorld");
+            ServerWorld = ClientServerBootstrap.CreateServerWorld("ServerWorld");
         }
 
         if (_role is PlayType.ClientAndServer or PlayType.Client)
         {
-            clientWorld = ClientServerBootstrap.CreateClientWorld("ClientWorld");
+            ClientWorld = ClientServerBootstrap.CreateClientWorld("ClientWorld");
         }
 
         DestroyLocalSimulationWorld();
-   
-        if (serverWorld != null)
+
+        if (ServerWorld != null)
         {
-            World.DefaultGameObjectInjectionWorld = serverWorld;
+            World.DefaultGameObjectInjectionWorld = ServerWorld;
         }
-        else if (clientWorld != null)
+        else if (ClientWorld != null)
         {
-            World.DefaultGameObjectInjectionWorld = clientWorld;
+            World.DefaultGameObjectInjectionWorld = ClientWorld;
         }
 
         SubScene[] subScenes = FindObjectsByType<SubScene>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
-        if (serverWorld != null)
+        if (ServerWorld != null)
         {
-            while (!serverWorld.IsCreated)
+            while (!ServerWorld.IsCreated)
             {
                 yield return null;
             }
+
             if (subScenes != null)
             {
                 foreach (SubScene t in subScenes)
                 {
-                    SceneSystem.LoadParameters loadParameters = new () { Flags = SceneLoadFlags.BlockOnStreamIn };
-                    Entity sceneEntity = SceneSystem.LoadSceneAsync(serverWorld.Unmanaged, new Unity.Entities.Hash128(t.SceneGUID.Value), loadParameters);
-                    while (!SceneSystem.IsSceneLoaded(serverWorld.Unmanaged, sceneEntity))
+                    SceneSystem.LoadParameters loadParameters = new() { Flags = SceneLoadFlags.BlockOnStreamIn };
+                    Entity sceneEntity = SceneSystem.LoadSceneAsync(ServerWorld.Unmanaged, new Unity.Entities.Hash128(t.SceneGUID.Value), loadParameters);
+                    while (!SceneSystem.IsSceneLoaded(ServerWorld.Unmanaged, sceneEntity))
                     {
-                        serverWorld.Update();
+                        ServerWorld.Update();
                     }
                 }
             }
-            using EntityQuery query = serverWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
-            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Listen(NetworkEndpoint.Parse(_listenIP, _port));
+
+            using EntityQuery query = ServerWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
+            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Listen(NetworkEndpoint.Parse(ListenIP, Port));
         }
 
-        if (clientWorld != null)
+        if (ClientWorld != null)
         {
-            while (!clientWorld.IsCreated)
+            while (!ClientWorld.IsCreated)
             {
                 yield return null;
             }
+
             if (subScenes != null)
             {
                 foreach (SubScene t in subScenes)
                 {
-                    SceneSystem.LoadParameters loadParameters = new () { Flags = SceneLoadFlags.BlockOnStreamIn };
-                    Entity sceneEntity = SceneSystem.LoadSceneAsync(clientWorld.Unmanaged, new Unity.Entities.Hash128(t.SceneGUID.Value), loadParameters);
-                    while (!SceneSystem.IsSceneLoaded(clientWorld.Unmanaged, sceneEntity))
+                    SceneSystem.LoadParameters loadParameters = new() { Flags = SceneLoadFlags.BlockOnStreamIn };
+                    Entity sceneEntity = SceneSystem.LoadSceneAsync(ClientWorld.Unmanaged, new Unity.Entities.Hash128(t.SceneGUID.Value), loadParameters);
+                    while (!SceneSystem.IsSceneLoaded(ClientWorld.Unmanaged, sceneEntity))
                     {
-                        clientWorld.Update();
+                        ClientWorld.Update();
                     }
                 }
             }
-            using EntityQuery query = clientWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
-            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Connect(clientWorld.EntityManager, NetworkEndpoint.Parse(_connectIP, _port));
+
+            using EntityQuery query = ClientWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
+            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Connect(ClientWorld.EntityManager, NetworkEndpoint.Parse(ConnectIP, Port));
         }
     }
-
 }
