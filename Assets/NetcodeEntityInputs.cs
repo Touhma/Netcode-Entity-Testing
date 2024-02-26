@@ -308,7 +308,7 @@ public partial class @NetcodeEntityInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7dbc560d-f91c-4b49-adf1-4cd06d210014"",
-                    ""path"": ""<Keyboard>/w"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
