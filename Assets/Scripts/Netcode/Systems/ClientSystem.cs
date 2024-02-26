@@ -24,11 +24,23 @@ namespace Netcode.Systems
 
         protected override void OnUpdate()
         {
+            EntityCommandBuffer commandBuffer = new (Allocator.Temp);
+            
+            foreach ((RefRO<ReceiveRpcCommandRequest> request, RefRO<ServerMessageRpcCommand> command, Entity entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<ServerMessageRpcCommand>>().WithEntityAccess())
+            {
+                Debug.Log(command.ValueRO.Message);
+                commandBuffer.DestroyEntity(entity);
+            }
+            
             // To send command need 1 entity per command 
             if (Inputs.Player.Space.WasPerformedThisFrame())
             {
                 SendMessageRpc("Hello from client ", ConnectionManager.ClientWorld);
             }
+            
+            commandBuffer.Playback(EntityManager);
+            commandBuffer.Dispose();
+          
         }
 
         protected override void OnDestroy()
