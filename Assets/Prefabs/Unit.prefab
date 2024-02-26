@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c79d771cedb4794bf100ce60df5f764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultGhostMode: 0
-  SupportedGhostModes: 2
+  DefaultGhostMode: 2
+  SupportedGhostModes: 3
   OptimizationMode: 0
   Importance: 1
   prefabId: fe143e25928edf34db715a7b5ee61663

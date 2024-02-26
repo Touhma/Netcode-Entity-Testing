@@ -49,10 +49,8 @@ namespace Netcode.Systems
 
             foreach ((RefRO<ReceiveRpcCommandRequest> request, RefRO<SpawnUnitRpcCommand> command, Entity entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<SpawnUnitRpcCommand>>().WithEntityAccess())
             {
-                Debug.Log("Server Spawn Check");
                 if (!SystemAPI.TryGetSingleton(out PrefabsComponentData prefabsComponentData) || prefabsComponentData.Prefab == Entity.Null) continue;
 
-                Debug.Log("Server Spawn");
                 Entity unit = commandBuffer.Instantiate(prefabsComponentData.Prefab);
                 commandBuffer.SetComponent(unit, new LocalTransform()
                 {
@@ -67,9 +65,16 @@ namespace Netcode.Systems
                 {
                     NetworkId = _clients[request.ValueRO.SourceConnection].Value
                 });
-                */
+                commandBuffer.AppendToBuffer(request.ValueRO.SourceConnection, new LinkedEntityGroup()
+                {
+                    Value = unit
+                });
+
+                // */
+
                 commandBuffer.DestroyEntity(entity);
             }
+
 
             commandBuffer.Playback(EntityManager);
             commandBuffer.Dispose();
