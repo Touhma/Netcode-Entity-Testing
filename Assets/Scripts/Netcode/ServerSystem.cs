@@ -44,6 +44,7 @@ namespace Netcode
                     });
 
                     NetworkId networkId = _clients[request.ValueRO.SourceConnection];
+                    
                     commandBuffer.SetComponent(unit, new GhostOwner()
                     {
                         NetworkId = networkId.Value
