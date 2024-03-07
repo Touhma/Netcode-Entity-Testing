@@ -19,6 +19,7 @@ namespace Netcode
         protected override void OnUpdate()
         {
             EntityCommandBuffer commandBuffer = new(Allocator.Temp);
+            /*
             foreach ((RefRO<ReceiveRpcCommandRequest> request, RefRO<ServerMessageRpcCommand> command, Entity entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>, RefRO<ServerMessageRpcCommand>>().WithEntityAccess())
             {
                 Debug.Log(command.ValueRO.Message);
@@ -28,6 +29,7 @@ namespace Netcode
             {
                 SpawnUnitRpc(ConnectionManager.ClientWorld);
             }
+            */
             commandBuffer.Playback(EntityManager);
             commandBuffer.Dispose();
         }

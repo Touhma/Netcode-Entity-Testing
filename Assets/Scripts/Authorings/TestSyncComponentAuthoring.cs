@@ -12,6 +12,7 @@ namespace Authorings
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new TestSyncComponent());
+                AddBuffer<TestSyncBuffer>(entity);
             }
         }
     }

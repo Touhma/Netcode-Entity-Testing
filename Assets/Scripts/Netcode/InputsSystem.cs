@@ -30,10 +30,12 @@ namespace Netcode
         protected override void OnUpdate()
         {
             Vector2 playerMove = _controls.Player.Move.ReadValue<Vector2>();
+            /*
             foreach (RefRW<PlayerInputData> input in SystemAPI.Query<RefRW<PlayerInputData>>().WithAll<GhostOwnerIsLocal>())
             {
                 input.ValueRW.Move = playerMove;
-            }
+            }*/
+            
         }
 
     }

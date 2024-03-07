@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 92872305}
   - component: {fileID: 92872304}
   - component: {fileID: 92872306}
+  - component: {fileID: 92872307}
   m_Layer: 0
   m_Name: Prefabs
   m_TagString: Untagged
@@ -151,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Unit: {fileID: 1101654530433804549, guid: a9575d5020d7bf242a5797504e9274c7, type: 3}
   Player: {fileID: 2969662026390888002, guid: 71b87e2a09878314380df1480c243b61, type: 3}
+  Time: {fileID: 6998638291037847875, guid: 59dec0ab4cbff294cbcc0467e9a5caf2, type: 3}
 --- !u!4 &92872305
 Transform:
   m_ObjectHideFlags: 0
@@ -180,6 +182,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Singleton: {fileID: 7147058319760272074, guid: 154320599e5c6ef41805ac81de501302,
     type: 3}
+--- !u!114 &92872307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 92872303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd7a02b9e4bf4c0285b0f9085ac6f15a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &725061008
 GameObject:
   m_ObjectHideFlags: 0
