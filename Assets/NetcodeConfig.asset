@@ -43,4 +43,4 @@ MonoBehaviour:
     MinDistanceScaledSendImportance: 0
     MaxSendChunks: 0
     MaxSendEntities: 0
-    CleanupConnectionStatePerTick: 1
+    CleanupConnectionStatePerTick: 0

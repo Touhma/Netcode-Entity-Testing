@@ -38,12 +38,12 @@ namespace Netcode
 
             PrefabsData prefabTag = SystemAPI.GetSingleton<PrefabsData>();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Entity inst = ecb.Instantiate(prefabTag.Time);
                 ecb.AddComponent<TestInstTag>(inst);
                 
-                for (int x = 0; x < 1000; x++)
+                for (int x = 0; x < 10; x++)
                 {
                     ecb.AppendToBuffer(inst, new TestSyncBuffer
                     {

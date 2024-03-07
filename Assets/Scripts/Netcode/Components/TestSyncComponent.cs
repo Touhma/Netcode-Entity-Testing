@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using Unity.NetCode;
 
 namespace Netcode.Components
@@ -19,6 +20,18 @@ namespace Netcode.Components
     public struct TestSyncBuffer : IBufferElementData
     {
         [GhostField(Quantization = 1000)] public float Progress;
+    }
+
+    public struct SplinePositions : IComponentData
+    {
+        public float3 Start;
+        public float3 End ;
+    }
+
+    public struct SplineProgress : IComponentData
+    {
+        public Entity Spline;
+        public float Position;
     }
     
     public struct TestInstTag: IComponentData{}
