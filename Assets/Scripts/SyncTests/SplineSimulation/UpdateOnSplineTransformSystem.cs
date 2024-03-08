@@ -10,7 +10,7 @@ using Unity.Transforms;
 
 namespace Netcode
 {
-    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation | WorldSystemFilterFlags.ClientSimulation)]
+    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     public partial struct UpdateOnSplineTransformSystem : ISystem
     {
         public void OnCreate(ref SystemState state)

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Netcode
 {
-    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation | WorldSystemFilterFlags.ClientSimulation)]
+    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     [UpdateBefore(typeof(UpdateOnSplineSystem))]
     public partial struct SpawnOnSplineSystem : ISystem
     {

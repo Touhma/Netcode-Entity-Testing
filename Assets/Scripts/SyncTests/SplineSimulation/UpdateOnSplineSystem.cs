@@ -8,7 +8,7 @@ using Unity.Transforms;
 
 namespace Netcode
 {
-    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation | WorldSystemFilterFlags.ClientSimulation)]
+    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     [UpdateBefore(typeof(UpdateOnSplineTransformSystem))]
     public partial struct UpdateOnSplineSystem : ISystem
     {
