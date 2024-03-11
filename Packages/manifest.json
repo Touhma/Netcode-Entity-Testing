@@ -7,6 +7,7 @@
     "com.unity.entities.graphics": "1.2.0-pre.6",
     "com.unity.ide.rider": "3.0.27",
     "com.unity.inputsystem": "1.7.0",
+    "com.unity.logging": "1.2.0-pre.12",
     "com.unity.netcode": "1.2.0-pre.6",
     "com.unity.physics": "1.2.0-pre.6",
     "com.unity.render-pipelines.universal": "16.0.5",
