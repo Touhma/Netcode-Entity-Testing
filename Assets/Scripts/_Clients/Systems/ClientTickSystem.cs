@@ -33,7 +33,6 @@ namespace _Clients.Systems
                     StartingTs = 0,
                     ElapsedTs = 0
                 };
-
                
                 tick.StartingTs = command.ValueRO.ServerTs;
                 tick.ElapsedTs = timeDiff;

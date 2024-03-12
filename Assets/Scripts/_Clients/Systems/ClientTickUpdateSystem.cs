@@ -8,7 +8,6 @@ namespace _Clients.Systems
     
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateBefore(typeof(ClientTickSystem))]
     public partial struct ClientTickUpdateSystem : ISystem
     {
 

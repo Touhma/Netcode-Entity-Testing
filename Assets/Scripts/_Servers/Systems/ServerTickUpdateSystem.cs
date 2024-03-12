@@ -6,7 +6,7 @@ using UnityEngine;
 namespace _Servers.Systems
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
     [UpdateBefore(typeof(ServerTickSystem))]
     public partial struct ServerTickUpdateSystem : ISystem
     {

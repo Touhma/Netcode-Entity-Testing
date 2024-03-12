@@ -20,6 +20,8 @@ public class ConnectionManager : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
+            
         if (Application.isEditor)
         {
             _role = PlayType.ClientAndServer;
