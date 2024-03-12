@@ -8,6 +8,7 @@ using UnityEngine;
 namespace Netcode
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
     public partial class ServerSystem : SystemBase
     {
 
@@ -25,7 +26,8 @@ namespace Netcode
             
             foreach ((RefRO<NetworkId> id, Entity entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<InitializedClient>().WithEntityAccess())
             {
-                Debug.Log("Connecting Client");
+                Debug.LogWarning("InitializedClient");
+                commandBuffer.AddComponent<InitializedClient>(entity);
             }
             commandBuffer.Playback(EntityManager);
             commandBuffer.Dispose();

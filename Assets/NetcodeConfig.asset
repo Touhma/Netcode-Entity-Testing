@@ -18,14 +18,14 @@ MonoBehaviour:
     SimulationTickRate: 60
     PredictedFixedStepSimulationTickRatio: 1
     NetworkTickRate: 60
-    MaxSimulationStepsPerFrame: 1
-    MaxSimulationStepBatchSize: 4
-    TargetFrameRateMode: 2
+    MaxSimulationStepsPerFrame: 0
+    MaxSimulationStepBatchSize: 0
+    TargetFrameRateMode: 0
   ClientTickRate:
-    InterpolationTimeNetTicks: 2
+    InterpolationTimeNetTicks: 0
     InterpolationTimeMS: 0
-    MaxExtrapolationTimeSimTicks: 20
-    MaxPredictAheadTimeMS: 500
+    MaxExtrapolationTimeSimTicks: 0
+    MaxPredictAheadTimeMS: 0
     TargetCommandSlack: 2
     MaxPredictionStepBatchSizeRepeatedTick: 0
     MaxPredictionStepBatchSizeFirstTimeTick: 0
