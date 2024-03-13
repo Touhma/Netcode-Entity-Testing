@@ -10,7 +10,7 @@ using UnityEngine;
 namespace _Servers.Systems
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     [UpdateBefore(typeof(ServerSystem))]
     public partial struct ServerTickSystem : ISystem
     {
@@ -19,7 +19,7 @@ namespace _Servers.Systems
             state.RequireForUpdate<NetworkTime>();
             state.RequireForUpdate<ClientServerTickRate>();
             state.RequireForUpdate<LockstepTick>();
-            
+
             Debug.LogWarning("LockstepTick");
 
             state.EntityManager.CreateSingleton(new LockstepTick()
@@ -37,20 +37,17 @@ namespace _Servers.Systems
             {
                 RefRW<LockstepTick> tick = SystemAPI.GetSingletonRW<LockstepTick>();
                 tick.ValueRW.ElapsedTs = NetworkTimeSystem.TimestampMS - tick.ValueRO.StartingTs;
-                
+
                 Debug.Log("Send ServerTick");
                 Debug.LogWarning("NetworkTimeSystem.TimestampMS  - Server " + NetworkTimeSystem.TimestampMS);
                 ClientServerTickRate clientServerTickRate = SystemAPI.GetSingleton<ClientServerTickRate>();
                 NetworkTime networkTime = SystemAPI.GetSingleton<NetworkTime>();
-                
 
                 tick.ValueRW.CurrentTick = networkTime.ServerTick.SerializedData;
                 float deltaTime = SystemAPI.Time.DeltaTime;
                 float deltaTicks = deltaTime * clientServerTickRate.SimulationTickRate;
 
-                Entity request = state.EntityManager.CreateEntity();
-                
-                Debug.LogWarning("LockstepCommands");
+                Entity request = buffer.CreateEntity();
                 buffer.AddComponent(request, new SendRpcCommandRequest());
                 buffer.AddComponent(request, new LockstepCommands()
                 {
@@ -59,6 +56,36 @@ namespace _Servers.Systems
                     ServerStartingTs = tick.ValueRW.StartingTs,
                     ServerElapsedTs = tick.ValueRW.ElapsedTs
                 });
+            }
+
+            foreach ((RefRW<HeartBeatCommand> heartBeat, Entity entity) in SystemAPI.Query<RefRW<HeartBeatCommand>>().WithEntityAccess())
+            {
+                NetworkTime networkTime = SystemAPI.GetSingleton<NetworkTime>();
+
+                Debug.LogWarning("Client heartBeat - ServerTick : " + heartBeat.ValueRO.ServerTick + " --> current ServerTick SerializedData = " + networkTime.ServerTick.SerializedData);
+                Debug.LogWarning("Client heartBeat - ClientTick :" + heartBeat.ValueRO.ClientTick);
+
+                uint delta = networkTime.ServerTick.SerializedData - heartBeat.ValueRO.ClientTick;
+                Debug.LogWarning("Client heartBeat - delta :" +  delta);
+                if (delta <= 0)
+                {
+                    Debug.LogError("Prediction error : " + delta);
+                }
+
+                /*
+                Entity heartSBeat = buffer.CreateEntity();
+
+                buffer.AddComponent(heartSBeat, new SendRpcCommandRequest());
+                buffer.AddComponent(heartSBeat, new HeartBeatCommand()
+                {
+                    ServerTick = networkTime.ServerTick.SerializedData,
+                    ServerTs = NetworkTimeSystem.TimestampMS,
+                    ClientTick = tick.ValueRW.InterpolationTick.SerializedData,
+                    ClientTs = NetworkTimeSystem.TimestampMS
+                });
+                //*/
+
+                buffer.DestroyEntity(entity);
             }
 
             buffer.Playback(state.EntityManager);

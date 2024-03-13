@@ -6,7 +6,7 @@ using UnityEngine;
 namespace _Servers.Systems
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     [UpdateBefore(typeof(ServerTickSystem))]
     public partial struct ServerTickUpdateSystem : ISystem
     {
@@ -17,11 +17,17 @@ namespace _Servers.Systems
 
         public void OnUpdate(ref SystemState state)
         {
+            foreach ((RefRW<NetworkTime> tick, Entity entity) in SystemAPI.Query<RefRW<NetworkTime>>().WithEntityAccess())
+            {
+                Debug.Log(NetworkTimeSystem.TimestampMS + " --> current Server ServerTick " + tick.ValueRW.ServerTick.SerializedData);
+            }
+            //*
             foreach ((RefRW<LockstepTick> tick, Entity entity) in SystemAPI.Query<RefRW<LockstepTick>>().WithEntityAccess())
             {
                 tick.ValueRW.CurrentTick++;
-                Debug.Log(NetworkTimeSystem.TimestampMS + " --> current Server Tick = " + tick.ValueRW.CurrentTick);
+               // Debug.Log(NetworkTimeSystem.TimestampMS + " --> current Server Tick = " + tick.ValueRW.CurrentTick);
             }
+            //*/
         }
     }
 }

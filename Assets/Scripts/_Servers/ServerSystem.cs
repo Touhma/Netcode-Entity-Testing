@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Netcode
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     public partial class ServerSystem : SystemBase
     {
 
