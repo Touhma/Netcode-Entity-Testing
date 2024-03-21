@@ -6,6 +6,7 @@ namespace _Commons.Components
     {
         public uint CurrentTick;
         public uint CurrentPartialTick;
+        public uint DeltaTick;
     }
     
     public struct TickTimerComponent : IComponentData

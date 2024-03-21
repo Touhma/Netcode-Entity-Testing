@@ -29,13 +29,16 @@ namespace _Clients.Systems
         {
             RefRW<TickClockComponent> currentTick = SystemAPI.GetSingletonRW<TickClockComponent>();
             RefRW<TickTimerComponent> clockTimer = SystemAPI.GetSingletonRW<TickTimerComponent>();
-            
+
+            uint deltaTick = 0;
             for (clockTimer.ValueRW.AccumulatedTime += (uint)(SystemAPI.Time.DeltaTime * 1000); clockTimer.ValueRW.AccumulatedTime >= clockTimer.ValueRW.TickDt;)
             {
                 currentTick.ValueRW.CurrentTick++;
+                deltaTick++;
                 clockTimer.ValueRW.AccumulatedTime -= clockTimer.ValueRW.TickDt;
                 currentTick.ValueRW.CurrentPartialTick = clockTimer.ValueRW.AccumulatedTime;
             }
+            currentTick.ValueRW.DeltaTick = deltaTick;
         }
 
         public void OnStartRunning(ref SystemState state)
