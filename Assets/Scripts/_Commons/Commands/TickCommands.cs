@@ -2,11 +2,11 @@
 
 namespace _Commons.Commands
 {
-    public struct HeartBeatCommand : IRpcCommand
+    public struct TickSyncCommand : IRpcCommand
     {
-        public uint ServerTick;
         public uint ServerTs;
-        public uint ClientTick;
+        public uint ServerTick;
+        public uint ServerTickPartial;
         public uint ClientTs;
     }
 }

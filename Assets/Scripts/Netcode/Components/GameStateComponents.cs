@@ -2,8 +2,5 @@
 
 namespace Netcode.Components
 {
-    public struct InitializedClient : IComponentData
-    {
-
-    }
+    public struct InitializedClientTag : IComponentData { }
 }

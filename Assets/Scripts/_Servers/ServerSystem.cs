@@ -9,27 +9,25 @@ namespace Netcode
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    public partial class ServerSystem : SystemBase
+    public partial struct ServerSystem : ISystem
     {
-
         private ComponentLookup<NetworkId> _clients;
 
-        protected override void OnCreate()
+        public void OnCreate(ref SystemState state)
         {
-            _clients = GetComponentLookup<NetworkId>(true);
+            _clients = SystemAPI.GetComponentLookup<NetworkId>(true);
         }
 
-        protected override void OnUpdate()
+        public void OnUpdate(ref SystemState state)
         {
-            _clients.Update(this);
             EntityCommandBuffer commandBuffer = new(Allocator.Temp);
             
-            foreach ((RefRO<NetworkId> id, Entity entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<InitializedClient>().WithEntityAccess())
+            foreach ((RefRO<NetworkId> id, Entity entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<InitializedClientTag>().WithEntityAccess())
             {
                 Debug.LogWarning("InitializedClient");
-                commandBuffer.AddComponent<InitializedClient>(entity);
+                commandBuffer.AddComponent<InitializedClientTag>(entity);
             }
-            commandBuffer.Playback(EntityManager);
+            commandBuffer.Playback(state.EntityManager);
             commandBuffer.Dispose();
         }
     }
