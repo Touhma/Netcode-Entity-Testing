@@ -7,7 +7,7 @@ namespace _Servers
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    public partial struct ServerSystem : ISystem
+    public partial struct ServerInitializeClientSystem : ISystem
     {
         public void OnUpdate(ref SystemState state)
         {

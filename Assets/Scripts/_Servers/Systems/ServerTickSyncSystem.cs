@@ -9,7 +9,7 @@ namespace _Servers.Systems
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateBefore(typeof(ServerSystem))]
+    [UpdateBefore(typeof(ServerInitializeClientSystem))]
     public partial struct ServerTickSyncSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
