@@ -10,34 +10,34 @@ namespace _Servers.Systems
     {
         public void OnCreate(ref SystemState state)
         {
-            state.EntityManager.CreateSingleton(new TickClockComponent()
+            TickClockComponent tickClock = new()
             {
-                CurrentTick = 0,
-                CurrentPartialTick = 0
-            });
-            
-            state.EntityManager.CreateSingleton(new TickTimerComponent()
-            {
-                TickDt = (uint)((1000f / 10)),
-                AccumulatedTime = 0
-            });
+                TickDelta = (uint)(1000f / 10),
+                TickLatest = 0,
+                TickLatestPartial = 0,
+                TickIncreaseDelta = 0,
+                TickCurrentPartial = 0,
+                TickCurrentDelta = 0,
+            };
+            state.EntityManager.CreateSingleton(tickClock);
         }
 
         public void OnUpdate(ref SystemState state)
         {
             RefRW<TickClockComponent> currentTick = SystemAPI.GetSingletonRW<TickClockComponent>();
-            RefRW<TickTimerComponent> clockTimer = SystemAPI.GetSingletonRW<TickTimerComponent>();
 
             uint deltaTick = 0;
-            for (clockTimer.ValueRW.AccumulatedTime += (uint)(SystemAPI.Time.DeltaTime * 1000); clockTimer.ValueRW.AccumulatedTime >= clockTimer.ValueRW.TickDt;)
+            uint deltaMs = (uint)(SystemAPI.Time.DeltaTime * 1000);
+
+            currentTick.ValueRW.TickCurrentDelta = deltaMs;
+
+            for (currentTick.ValueRW.TickCurrentPartial += deltaMs; currentTick.ValueRW.TickCurrentPartial >= currentTick.ValueRW.TickDelta;)
             {
-                currentTick.ValueRW.CurrentTick++;
-                deltaTick++;
-                clockTimer.ValueRW.AccumulatedTime -= clockTimer.ValueRW.TickDt;
-                currentTick.ValueRW.CurrentPartialTick = clockTimer.ValueRW.AccumulatedTime;
-              
+                currentTick.ValueRW.TickLatest++;
+                currentTick.ValueRW.TickIncreaseDelta = deltaTick++;
+                currentTick.ValueRW.TickCurrentPartial -= currentTick.ValueRW.TickDelta;
+                currentTick.ValueRW.TickLatestPartial = currentTick.ValueRW.TickCurrentPartial;
             }
-            currentTick.ValueRW.DeltaTick = deltaTick;
         }
     }
 }

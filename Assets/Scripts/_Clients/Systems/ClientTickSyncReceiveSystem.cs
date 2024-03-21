@@ -31,9 +31,8 @@ namespace _Clients.Systems
                 buffer.AddComponent<ConnectionEstablishedTag>(tag);
 
                 RefRW<TickClockComponent> clock = SystemAPI.GetSingletonRW<TickClockComponent>();
-                RefRW<TickTimerComponent> clockTimer = SystemAPI.GetSingletonRW<TickTimerComponent>();
-                clockTimer.ValueRW.AccumulatedTime = heartBeat.ValueRO.ServerTickPartial + (uint)(ClientRTT / 2) ;
-                clock.ValueRW.CurrentTick = heartBeat.ValueRO.ServerTick;
+                clock.ValueRW.TickCurrentPartial = heartBeat.ValueRO.ServerTickPartial + ClientRTT / 2 ;
+                clock.ValueRW.TickLatest = heartBeat.ValueRO.ServerTick;
                 buffer.DestroyEntity(entity);
             }
 

@@ -35,8 +35,8 @@ namespace _Servers.Systems
                 buffer.AddComponent(heartSBeat, new TickSyncCommand()
                 {
                     ServerTs = (uint)(SystemAPI.Time.ElapsedTime * 1000),
-                    ServerTick = clock.CurrentTick,
-                    ServerTickPartial =  clock.CurrentPartialTick,
+                    ServerTick = clock.TickLatest,
+                    ServerTickPartial =  clock.TickLatestPartial,
                     
                     ClientTs = heartBeat.ValueRO.ClientTs
                 });
