@@ -1,16 +1,17 @@
 ﻿using _Commons.Commands;
 using _Commons.Components;
+using _Commons.SystemGroups;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace _Servers.Systems
+namespace _Servers.Systems.Clock
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateBefore(typeof(ServerInitializeClientSystem))]
-    public partial struct ServerTickSyncSystem : ISystem
+    [UpdateInGroup(typeof(PostTickGroup))]
+    [UpdateBefore(typeof(Network.ServerInitializeClientSystem))]
+    public partial struct ServerTickSyncReceiveSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {
@@ -19,7 +20,7 @@ namespace _Servers.Systems
 
         public void OnUpdate(ref SystemState state)
         {
-            EntityCommandBuffer buffer = new EntityCommandBuffer(Allocator.Temp);
+            EntityCommandBuffer buffer = new(Allocator.Temp);
 
             foreach ((RefRW<TickSyncCommand> heartBeat, RefRW<ReceiveRpcCommandRequest> request, Entity entity) in SystemAPI.Query<RefRW<TickSyncCommand>, RefRW<ReceiveRpcCommandRequest>>().WithEntityAccess())
             {

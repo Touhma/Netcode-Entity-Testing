@@ -1,4 +1,5 @@
 ﻿using _Commons.Commands;
+using _Commons.SystemGroups;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
@@ -6,7 +7,7 @@ using Unity.NetCode;
 namespace _Clients.Systems
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateInGroup(typeof(PostTickGroup))]
     public partial struct ClientTickSyncSendSystem : ISystem
     {
         public void OnCreate(ref SystemState state)

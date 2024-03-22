@@ -1,13 +1,13 @@
 ﻿using _Commons.Components;
 using _Commons.Helpers;
+using _Commons.SystemGroups;
 using Unity.Entities;
-using UnityEngine;
 
-namespace _Servers.Systems
+namespace _Servers.Systems.Clock
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-    [UpdateBefore(typeof(ServerTickSyncSystem))]
+    [UpdateInGroup(typeof(UpdateTickGroup))]
+    [UpdateBefore(typeof(ServerTickSyncReceiveSystem))]
     public partial struct ServerClocksSystem : ISystem
     {
         public void OnCreate(ref SystemState state)

@@ -3,7 +3,7 @@ using Unity.Entities;
 
 namespace _Commons.Helpers
 {
-    public class ClocksHelpers
+    public static class ClocksHelpers
     {
         public static void ClockInit(ref SystemState state)
         {
@@ -17,7 +17,16 @@ namespace _Commons.Helpers
                 TickCurrentDelta = 0,
             };
             state.EntityManager.CreateSingleton(tickClock);
-
+        }
+        
+        public static void CleanTheTick(ref SystemState state, Entity previousTick)
+        {
+            state.EntityManager.DestroyEntity(previousTick);
+        }
+        
+        public static void TickTheClock(ref SystemState state)
+        {
+            state.EntityManager.CreateSingleton<TickUpdateTag>();
         }
         
         public static void ClockUpdate(ref SystemState state, ref RefRW<TickClockComponent> currentTick, float delta)

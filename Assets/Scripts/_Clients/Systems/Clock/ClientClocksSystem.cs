@@ -1,12 +1,13 @@
 ﻿using _Commons.Components;
 using _Commons.Helpers;
+using _Commons.SystemGroups;
 using Unity.Entities;
 using UnityEngine;
 
 namespace _Clients.Systems
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateInGroup(typeof(UpdateTickGroup))]
     public partial struct ClientClocksSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
