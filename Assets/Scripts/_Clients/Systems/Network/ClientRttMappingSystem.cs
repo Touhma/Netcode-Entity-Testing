@@ -13,7 +13,7 @@ namespace _Clients.Systems.Network
             EntityCommandBuffer buffer = new(Allocator.Temp);
             foreach ((RefRW<HeartBeatCommand> heartBeat, RefRW<ReceiveRpcCommandRequest> request, Entity entity) in SystemAPI.Query<RefRW<HeartBeatCommand>, RefRW<ReceiveRpcCommandRequest>>().WithEntityAccess())
             {
-               NetworkHelper.BroadcastCommand(ref state, heartBeat.ValueRW);
+               NetworkHelper.BroadcastCommand(ref buffer, heartBeat.ValueRW);
                buffer.DestroyEntity(entity);
             }
 

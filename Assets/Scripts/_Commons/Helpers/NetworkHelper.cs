@@ -6,6 +6,13 @@ namespace _Commons.Helpers
 {
     public static class NetworkHelper
     {
+        public static void BroadcastCommand<T>(ref EntityCommandBuffer state, T command) where T : unmanaged, IRpcCommand, IComponentData
+        {
+            Entity entity = state.CreateEntity();
+            state.AddComponent(entity, command);
+            state.AddComponent<SendRpcCommandRequest>(entity);
+        }
+        
         public static void BroadcastCommand<T>(ref SystemState state, T command) where T : unmanaged, IRpcCommand, IComponentData
         {
             Entity entity = state.EntityManager.CreateEntity();

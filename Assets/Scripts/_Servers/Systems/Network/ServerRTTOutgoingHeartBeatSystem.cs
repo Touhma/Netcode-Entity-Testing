@@ -3,6 +3,7 @@ using _Commons.Components;
 using _Commons.Helpers;
 using _Commons.SystemGroups;
 using Unity.Entities;
+using Unity.NetCode;
 
 namespace _Servers.Systems.Network
 {
@@ -11,13 +12,12 @@ namespace _Servers.Systems.Network
     {
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<NetworkId>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
             RefRW<TickClockComponent> currentTick = SystemAPI.GetSingletonRW<TickClockComponent>();
-
-            state.EntityManager.CreateEntity();
 
             HeartBeatCommand command = new()
             {

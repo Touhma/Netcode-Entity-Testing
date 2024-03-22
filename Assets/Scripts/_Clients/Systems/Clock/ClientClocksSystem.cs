@@ -13,13 +13,11 @@ namespace _Clients.Systems.Clock
         public void OnCreate(ref SystemState state)
         {
             ClocksHelpers.ClockInit(ref state);
-            // Client Specific - start the clock after connection established
             state.RequireForUpdate<ConnectionEstablishedTag>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            Debug.LogWarning("ClientClock Initiated");
             RefRW<TickClockComponent> currentTick = SystemAPI.GetSingletonRW<TickClockComponent>();
             ClocksHelpers.ClockUpdate(ref state, ref currentTick, SystemAPI.Time.DeltaTime);
         }

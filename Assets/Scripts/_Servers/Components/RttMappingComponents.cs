@@ -5,13 +5,19 @@ namespace _Servers.Components
 {
     public struct NetworkMappingSingleton : IComponentData
     {
-        public NativeParallelMultiHashMap<Entity, RttElement> MappingRTT;
-        public NativeHashMap<uint, uint> MappingLatestTick;
-    }
+        public NativeHashMap<int, uint> MappingRTT;
+        public NativeHashMap<int, uint> MappingLatestTick;
 
-    public struct RttElement
-    {
-        public uint Tick;
-        public uint Latency;
+        public uint SlowestClientRTT()
+        {
+            uint slowest = 0;
+            foreach (KVPair<int, uint> kvPair in MappingRTT)
+            {
+                if (kvPair.Value <= slowest) continue;
+                slowest = kvPair.Value;
+            }
+
+            return slowest;
+        }
     }
 }
