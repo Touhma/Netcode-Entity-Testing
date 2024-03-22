@@ -1,3 +1,4 @@
+using _Commons.Helpers;
 using Gameplay.Commons.Architectures.SystemGroups;
 using Netcode.Components;
 using Unity.Collections;
@@ -16,7 +17,7 @@ namespace _Servers.Systems.Network
 
             foreach ((RefRO<NetworkId> id, Entity entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<InitializedClientTag>().WithEntityAccess())
             {
-                commandBuffer.AddComponent<InitializedClientTag>(entity);
+                NetworkHelper.InitializeClient(ref commandBuffer, entity);
             }
 
             commandBuffer.Playback(state.EntityManager);

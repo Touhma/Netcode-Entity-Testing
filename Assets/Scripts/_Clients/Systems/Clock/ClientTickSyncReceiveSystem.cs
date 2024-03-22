@@ -6,7 +6,7 @@ using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace _Clients.Systems
+namespace _Clients.Systems.Clock
 {
    
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation| WorldSystemFilterFlags.ThinClientSimulation)]

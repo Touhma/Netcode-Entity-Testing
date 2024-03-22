@@ -1,10 +1,10 @@
 ﻿using _Commons.Commands;
+using _Commons.Helpers;
 using _Commons.SystemGroups;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace _Clients.Systems
+namespace _Clients.Systems.Clock
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(PostTickGroup))]
@@ -17,18 +17,12 @@ namespace _Clients.Systems
 
         public void OnUpdate(ref SystemState state)
         {
-            EntityCommandBuffer buffer = new(Allocator.Temp);
-
-            Entity heartBeat = buffer.CreateEntity();
-
-            buffer.AddComponent(heartBeat, new SendRpcCommandRequest());
-            buffer.AddComponent(heartBeat, new TickSyncCommand()
+            TickSyncCommand command = new ()
             {
                 ClientTs = (uint)(SystemAPI.Time.ElapsedTime * 1000)
-            });
+            };
+            NetworkHelper.BroadcastCommand(ref state, command);
 
-            buffer.Playback(state.EntityManager);
-            buffer.Dispose();
             state.Enabled = false;
         }
     }

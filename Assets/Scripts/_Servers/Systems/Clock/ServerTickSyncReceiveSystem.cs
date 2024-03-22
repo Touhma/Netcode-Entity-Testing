@@ -1,5 +1,6 @@
 ﻿using _Commons.Commands;
 using _Commons.Components;
+using _Commons.Helpers;
 using _Commons.SystemGroups;
 using Unity.Collections;
 using Unity.Entities;
@@ -25,22 +26,19 @@ namespace _Servers.Systems.Clock
             foreach ((RefRW<TickSyncCommand> heartBeat, RefRW<ReceiveRpcCommandRequest> request, Entity entity) in SystemAPI.Query<RefRW<TickSyncCommand>, RefRW<ReceiveRpcCommandRequest>>().WithEntityAccess())
             {
                 Debug.LogWarning("Server HeartBeatCommand");
-                Entity heartSBeat = buffer.CreateEntity();
 
                 TickClockComponent clock = SystemAPI.GetSingleton<TickClockComponent>();
 
-                buffer.AddComponent(heartSBeat, new SendRpcCommandRequest()
-                {
-                    TargetConnection = request.ValueRO.SourceConnection
-                });
-                buffer.AddComponent(heartSBeat, new TickSyncCommand()
+                TickSyncCommand command = new()
                 {
                     ServerTs = (uint)(SystemAPI.Time.ElapsedTime * 1000),
                     ServerTick = clock.TickLatest,
-                    ServerTickPartial =  clock.TickLatestPartial,
-                    
+                    ServerTickPartial = clock.TickLatestPartial,
+
                     ClientTs = heartBeat.ValueRO.ClientTs
-                });
+                };
+                
+                NetworkHelper.SendCommandToTarget(ref buffer, command, request.ValueRO.SourceConnection);
 
                 buffer.DestroyEntity(entity);
             }

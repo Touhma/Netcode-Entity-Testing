@@ -4,7 +4,7 @@ using _Commons.SystemGroups;
 using Unity.Entities;
 using UnityEngine;
 
-namespace _Clients.Systems
+namespace _Clients.Systems.Clock
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(UpdateTickGroup))]

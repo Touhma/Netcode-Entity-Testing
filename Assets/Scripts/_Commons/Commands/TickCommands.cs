@@ -9,4 +9,10 @@ namespace _Commons.Commands
         public uint ServerTickPartial;
         public uint ClientTs;
     }
+
+    public struct HeartBeatCommand : IRpcCommand
+    {
+        public uint ServerTs;
+        public uint ClientTs;
+    }
 }

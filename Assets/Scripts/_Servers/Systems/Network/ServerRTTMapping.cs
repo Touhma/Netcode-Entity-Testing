@@ -1,10 +1,11 @@
-﻿using _Commons.Components;
+﻿using _Commons.Commands;
+using _Commons.Components;
 using _Commons.SystemGroups;
 using Netcode.Components;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace _Servers.Systems
+namespace _Servers.Systems.Network
 {
     [UpdateInGroup(typeof(UpdateOnTickGroup))]
     public partial struct ServerRTTMapping : ISystem
@@ -17,7 +18,7 @@ namespace _Servers.Systems
         {
             RefRW<TickClockComponent> currentTick = SystemAPI.GetSingletonRW<TickClockComponent>();
 
-            if (currentTick.ValueRO.TickIncreaseDelta == 0) return;
+            state.EntityManager.CreateEntity();
             
             foreach ((RefRO<NetworkId> id, Entity entity) in SystemAPI.Query<RefRO<NetworkId>>().WithAll<InitializedClientTag>().WithEntityAccess())
             {
