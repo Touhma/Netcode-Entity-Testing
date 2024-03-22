@@ -12,7 +12,7 @@ namespace _Commons.Commands
 
     public struct HeartBeatCommand : IRpcCommand
     {
+        public uint SentTick;
         public uint ServerTs;
-        public uint ClientTs;
     }
 }

@@ -20,16 +20,4 @@ namespace _Commons.Components
     public struct TickUpdateTag: IComponentData{}
 
     public struct ConnectionEstablishedTag : IComponentData { }
-
-    public struct NetworkMappingSingleton : IComponentData
-    {
-        public NativeParallelMultiHashMap<uint, RttElement> MappingRTT;
-        public NativeHashMap<uint, uint> MappingLatestTick;
-    }
-
-    public struct RttElement
-    {
-        public uint Tick;
-        public uint Latency;
-    }
 }
