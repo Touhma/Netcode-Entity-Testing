@@ -3,7 +3,7 @@ using _Commons.Helpers;
 using _Commons.SystemGroups;
 using Unity.Entities;
 
-namespace _Commons.Systems
+namespace _Commons.Systems.Clock
 {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation | WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(PostTickGroup))]

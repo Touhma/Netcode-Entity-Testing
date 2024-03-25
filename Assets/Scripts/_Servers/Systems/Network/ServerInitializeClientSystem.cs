@@ -1,5 +1,5 @@
 using _Commons.Helpers;
-using Gameplay.Commons.Architectures.SystemGroups;
+using Dependencies.SystemGroups;
 using Netcode.Components;
 using Unity.Collections;
 using Unity.Entities;

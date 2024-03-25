@@ -2,7 +2,7 @@
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-namespace Gameplay.Commons.Architectures.SystemGroups
+namespace Dependencies.SystemGroups
 {
     [UpdateInGroup(typeof(SimulationSystemGroup))]
     [UpdateBefore(typeof(TransformSystemGroup))]

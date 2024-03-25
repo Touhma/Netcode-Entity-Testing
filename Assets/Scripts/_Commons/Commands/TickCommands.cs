@@ -15,4 +15,16 @@ namespace _Commons.Commands
         public uint SentTick;
         public uint ServerTs;
     }
+    
+    public struct PlannedCommand : IRpcCommand
+    {
+        public uint CommandID;
+        public uint PlannedTick;
+    }
+
+    public struct CommandStatus : IRpcCommand
+    {
+        public uint CommandID;
+        public bool Status;
+    }
 }

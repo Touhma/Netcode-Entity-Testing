@@ -20,4 +20,6 @@ namespace _Commons.Components
     public struct TickUpdateTag: IComponentData{}
 
     public struct ConnectionEstablishedTag : IComponentData { }
+
+   
 }
